@@ -20,6 +20,7 @@ wannabe_back/dump.sql
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+tmp/
 
 # OS/editor files
 .DS_Store
