@@ -15,6 +15,7 @@ import bg6 from '../assets/BGImage/bg6.jpeg'
 import bg7 from '../assets/BGImage/bg7.jpeg'
 import bg8 from '../assets/BGImage/bg8.jpeg'
 import logo_white from '../assets/logo_white.png'
+import { API_URL } from '../api/url'
 
 
 const Landing = () => {
@@ -95,7 +96,7 @@ const Landing = () => {
                                 marginTop:'16px',
                                 backgroundColor:'#FAE100'
                             }}
-                            href={`${process.env.REACT_APP_API_URL}/auth/kakao`}
+                            href={`${API_URL}/auth/kakao`}
                             startIcon=<RiKakaoTalkFill/>
                         >
                         

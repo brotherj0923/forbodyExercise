@@ -11,6 +11,7 @@ import Carousel from "react-material-ui-carousel";
 import ExerciseModal from "../components/exercises/ExerciseModal";
 import useUserandRoleModel from "../hooks/useUserandRoleModel";
 import { exerciseApi } from "../api/services/exercise";
+import { getAssetUrl } from "../api/url";
 import StarsIcon from '@mui/icons-material/Stars';
 import { bgcolor, borderLeft, width } from "@mui/system";
 import { PiX } from "react-icons/pi";
@@ -101,7 +102,7 @@ const Exercise = () => {
                 {modelImg && (
                     <ImageBox>
                     <img
-                        src={`http://localhost:8000/${modelImg}`}
+                        src={getAssetUrl(modelImg)}
                         alt={"img"}
                         style={{ width: '300px', height: '300px', objectFit: 'cover' }}
                     />

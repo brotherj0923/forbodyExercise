@@ -3,6 +3,7 @@ import { Close as CloseIcon } from "@mui/icons-material";
 import { ForegroundBox } from "../styled_comp/StyledDiv";
 import male from "../../assets/MaleBodyShape.JPG";
 import female from "../../assets/FemaleBodyShape.JPG";
+import { getAssetUrl } from "../../api/url";
 
 const WannabeDetailModal = ({ open, handleClose, roleModels, activeStep }) => {
     function bodyshapeSwitch(id) {
@@ -85,7 +86,7 @@ const WannabeDetailModal = ({ open, handleClose, roleModels, activeStep }) => {
                     <CloseIcon />
                 </IconButton>
 
-                <img src={roleModels && `http://localhost:8000/${roleModels[activeStep]?.UserDetail[0]?.img}`} alt="role model" />
+                <img src={roleModels && getAssetUrl(roleModels[activeStep]?.UserDetail[0]?.img)} alt="role model" />
 
                 {roleModels[activeStep]?.id <= 4 ?
                     <img src={male} alt="bodyshape" />

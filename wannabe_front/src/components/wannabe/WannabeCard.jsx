@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import WannabeLikeBtn from './WannabeLikeBtn';
 import WannabeDetailModal from './WannabeDetailModal';
 import { useNavigate } from 'react-router-dom';
+import { getAssetUrl } from '../../api/url';
 
 const WannabeCard = ({liking, like, unlike}) => {
     const navigate = useNavigate();
@@ -120,7 +121,7 @@ const WannabeCard = ({liking, like, unlike}) => {
                 <CardMedia
                     component="img"
                     height="300"
-                    image={roleModels && `http://localhost:8000/${roleModels[activeStep]?.UserDetail[0]?.img}`}
+                    image={roleModels && getAssetUrl(roleModels[activeStep]?.UserDetail[0]?.img)}
                 />
                 <CardContent>
                     <span

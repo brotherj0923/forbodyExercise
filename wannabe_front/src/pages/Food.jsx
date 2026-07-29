@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import FoodRecommend from "../components/food/FoodRecommend";
 import Water from "../components/food/water";
 import useUserandRoleModel from "../hooks/useUserandRoleModel";
+import { getAssetUrl } from "../api/url";
 
 const Food = () => {
     const { userProfile, modelProfile, modelImg } = useUserandRoleModel();
@@ -56,7 +57,7 @@ const Food = () => {
                     >
                         {meal} 식단
                     </Typography>
-                    {modelImg && <img src={ `http://localhost:8000/${modelImg}`} width='200' alt={"img"} style={{borderRadius:"100px"}} />}
+                    {modelImg && <img src={getAssetUrl(modelImg)} width='200' alt={"img"} style={{borderRadius:"100px"}} />}
                     <Typography
                     style={{
                         padding:'24px 0 0'

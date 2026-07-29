@@ -6,6 +6,7 @@ import female from "../assets/FemaleBodyShape.JPG";
 import axios from 'axios';
 import Step from "../components/signup/Step";
 import { useAuth } from "../hooks/useAuth";
+import { API_URL } from "../api/url";
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -48,7 +49,7 @@ const SignUp = () => {
                 bodyshape &&
                 img && 
                 user_name) {
-                const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/join`, {
+                const res = await axios.post(`${API_URL}/auth/join`, {
                     email,
                     user_name,
                     password,

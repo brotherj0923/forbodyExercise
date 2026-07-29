@@ -12,6 +12,7 @@ import ShareEleBox from "./ShareEleBox";
 import WannabeLikeBtn from "./WannabeLikeBtn";
 import { BsFire } from "react-icons/bs";
 import styled from "styled-components";
+import { getAssetUrl } from "../../api/url";
 
 
 const ShowTop3List = ({ e, setIsChange, liking, like, unlike , ranking}) => {
@@ -166,7 +167,7 @@ const ShowTop3List = ({ e, setIsChange, liking, like, unlike , ranking}) => {
                             }
                         >
                             <Avatar
-                                src={`http://localhost:8000/${userImg}`}
+                                src={getAssetUrl(userImg)}
                                 
                                 alt={"img"}
                                 style={{

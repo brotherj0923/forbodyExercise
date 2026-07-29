@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import FormControl from '@mui/material/FormControl';
 import { useNavigate } from 'react-router-dom';
 import { RiKakaoTalkFill } from "react-icons/ri";
+import { API_URL } from '../api/url';
 
 const Login = () => {
     const { login, kakaoLogin } = useAuth();
@@ -134,7 +135,7 @@ const Login = () => {
                             margin:'16px 0 32px',
                             backgroundColor:'#FAE100'
                         }}
-                        href={`${process.env.REACT_APP_API_URL}/auth/kakao`}
+                        href={`${API_URL}/auth/kakao`}
                         startIcon=<RiKakaoTalkFill/>
                     >
                     카카오 로그인

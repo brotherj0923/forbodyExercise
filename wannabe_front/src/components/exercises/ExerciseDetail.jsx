@@ -5,6 +5,7 @@ import { Divider, IconButton, Typography, styled } from "@mui/material";
 import zIndex from "@mui/material/styles/zIndex";
 import StarsIcon from '@mui/icons-material/Stars';
 import { exerciseApi } from "../../api/services/exercise";
+import { getAssetUrl } from "../../api/url";
 import { ForegroundBox } from "../styled_comp/StyledDiv";
 
 const ExerciseDetail = ({exercise, favExercises, refreshFav, setRefreshFav, onClick }) => {
@@ -74,7 +75,7 @@ const ExerciseDetail = ({exercise, favExercises, refreshFav, setRefreshFav, onCl
                     style={{cursor:'pointer', border: 'none', outline: 'none', border: 'none', background: 'none', padding: 0, margin: 0, position:'absolute', right: 10 , top:10}}>
                     <StarsIcon style={{color:"lightgray", fontSize:'36px'}} /></IconButton>) 
             }
-            <ExerImg src={'http://localhost:8000'+exercise.img} width='100%' height='215px'  onClick={onClick} style={{cursor:'pointer' }}/>
+            <ExerImg src={getAssetUrl(exercise.img)} width='100%' height='215px'  onClick={onClick} style={{cursor:'pointer' }}/>
             
             {/* 수정(5.27) -- 상세 정보는 이미지 클릭했을 시 모달창 내에서 보일 수 있게끔 버튼 삭제 */}
             {/* <button onClick={handleOpenDesc}>상세정보</button> */}

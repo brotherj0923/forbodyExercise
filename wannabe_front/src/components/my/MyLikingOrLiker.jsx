@@ -6,6 +6,7 @@ import { TiDelete } from "react-icons/ti";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { getAssetUrl } from "../../api/url";
 
 const MyLikingOrLiker = ({open, handleClose, likingOrLiker, mylike=false}) => {
     const { goToErrPage } = useAuth();
@@ -106,7 +107,7 @@ const MyLikingOrLiker = ({open, handleClose, likingOrLiker, mylike=false}) => {
                                 }
                             >
                                 <ListItemAvatar>
-                                    <Avatar alt={profile.user_name} src={`http://localhost:8000/${profile.UserDetail[0]?.img}`} />
+                                    <Avatar alt={profile.user_name} src={getAssetUrl(profile.UserDetail[0]?.img)} />
                                 </ListItemAvatar>
                                 <ListItemText
                                     primary={profile.user_name}

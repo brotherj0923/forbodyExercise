@@ -3,6 +3,7 @@ import axios from "axios";
 import { Box, Typography, styled } from '@mui/material';
 import Carousel from 'react-material-ui-carousel'
 import ExerciseModal from "./ExerciseModal";
+import { getAssetUrl } from "../../api/url";
 
 const ExerciseFollow = ({favExercise}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,7 +20,7 @@ const ExerciseFollow = ({favExercise}) => {
                         }}>
                     <Typography variant="h6"  >{favExercise.name}</Typography>
                     <ExerImg 
-                        src={`http://localhost:8000${favExercise.img}`}
+                        src={getAssetUrl(favExercise.img)}
                         alt={favExercise.name}
                         onClick={() => {
                             setIsModalOpen(true);

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import useUserandRoleModel from "../../hooks/useUserandRoleModel";
 import { useAuth } from "../../hooks/useAuth";
 import logo_green2 from "../../assets/logo_green2.png"
+import { getAssetUrl } from "../../api/url";
 
 const HideOnScroll = ({ children, window, setShowTopBtn}) => {
     const trigger = useScrollTrigger({
@@ -50,7 +51,7 @@ const Header = (props) => {
                     Wannabe
                     </Button>
                     <IconButton onClick={goUserMenu}>
-                        <Avatar alt="userImg" src={ `http://localhost:8000/${userImg}`} sx={{boxShadow:'0px 0px 2px #888'}}/>
+                        <Avatar alt="userImg" src={getAssetUrl(userImg)} sx={{boxShadow:'0px 0px 2px #888'}}/>
                     </IconButton>
                 </Toolbar>
             </AppBar>

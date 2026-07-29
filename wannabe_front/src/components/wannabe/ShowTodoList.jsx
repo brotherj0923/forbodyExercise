@@ -13,6 +13,7 @@ import WannabeLikeBtn from "./WannabeLikeBtn";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import { BsFire } from "react-icons/bs";
+import { getAssetUrl } from "../../api/url";
 
 const ShowTodoList = ({ e, isChange, setIsChange, liking, like, unlike }) => {
     const token = localStorage.getItem("token");
@@ -150,7 +151,7 @@ const ShowTodoList = ({ e, isChange, setIsChange, liking, like, unlike }) => {
                 {userImg && (
                     <Grid item xs={3}>
                         <img
-                            src={`http://localhost:8000/${userImg}`}
+                            src={getAssetUrl(userImg)}
                             width="60"
                             height="60"
                             alt={"img"}

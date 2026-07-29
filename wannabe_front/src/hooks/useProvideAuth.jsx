@@ -4,6 +4,7 @@ import { Cookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import { userApi } from "../api/services/user";
 import { createBrowserRouter } from "react-router-dom";
+import { API_URL } from "../api/url";
 
 export const useProvideAuth = () => {
     const [loginUser, setLoginUser] = useState(localStorage.getItem("token"));
@@ -21,7 +22,7 @@ export const useProvideAuth = () => {
     const login = async(fCallback, sCallback, data) => {
         try{
             const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/auth/login`, 
+                `${API_URL}/auth/login`, 
                 data
             );
             if (response.data.code === 200) {

@@ -8,6 +8,7 @@ import MyCalendar from '../components/my/MyCalendar';
 import MyBmiChart from '../components/my/MyBmiChart';
 import MyInfoButtons from '../components/my/MyInfoButtons';
 import Loading from'../components/Loading'
+import { getAssetUrl } from '../api/url';
 
 const My = () => {
     const { logout } = useAuth()
@@ -22,7 +23,7 @@ const My = () => {
         <PageBox>
             {userImg && (
                 <img
-                    src={`http://localhost:8000/${userImg}`}
+                    src={getAssetUrl(userImg)}
                     width="200"
                     height="200"
                     alt={"img"}
