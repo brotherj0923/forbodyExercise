@@ -6,8 +6,25 @@ const session = require('express-session'); // 세션 모듈
 const cors = require('cors'); // cors 모듈
 
 
+const parseOrigins = (value) => (value || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+const allowedOrigins = [
+    ...parseOrigins(process.env.CLIENT_ORIGIN),
+    ...parseOrigins(process.env.CLIENT_URL),
+    'http://localhost:3000',
+];
+
 let corsOptions = {
-    origin: process.env.CLIENT_ORIGIN || process.env.CLIENT_URL,
+    origin(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error(`Not allowed by CORS: ${origin}`));
+    },
     credentials: true
 }
 const router = require('./routes');
