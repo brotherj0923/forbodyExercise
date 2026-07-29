@@ -7,7 +7,7 @@ const cors = require('cors'); // cors 모듈
 
 
 let corsOptions = {
-    origin: process.env.CLIENT_URL,
+    origin: process.env.CLIENT_ORIGIN || process.env.CLIENT_URL,
     credentials: true
 }
 const router = require('./routes');
@@ -62,6 +62,10 @@ app.use(
 
 app.use('/v1', router);
 // app.use('/v1', apiRouter);
+
+app.get('/health', (req, res) => {
+    res.status(200).json({ ok: true });
+});
 
 app.use((req, res, next) => {
     const err = new Error(`없는 경로 [${req.method} ${req.url}]`);
