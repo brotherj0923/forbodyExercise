@@ -47,18 +47,17 @@ const SignUp = () => {
                 height &&
                 weight && 
                 bodyshape &&
-                img && 
-                user_name) {
+                user_name.trim()) {
                 const res = await axios.post(`${API_URL}/auth/join`, {
                     email,
-                    user_name,
+                    user_name: user_name.trim(),
                     password,
                     gender,
                     birthday,
                     height,
                     weight,
                     bodyshape,
-                    img,
+                    img: img || null,
                     
                 })
                 if (res.data.code === 200) {

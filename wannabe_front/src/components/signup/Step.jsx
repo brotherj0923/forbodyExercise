@@ -26,6 +26,7 @@ const Step = ({title, inputData, step, setStep, joinData, setJoinData, goJoin, l
 
     const addJoinData = (e) => {
         const { name, value } = e.target;
+        const nextJoinData = {...joinData, [name]: value};
         if (name === 'email') {
             const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
             if (!emailRegex.test(value) || !value ) {
@@ -47,7 +48,7 @@ const Step = ({title, inputData, step, setStep, joinData, setJoinData, goJoin, l
             }
         }
         if (name === 'pwdchk') {
-            if (joinData.password != value) {
+            if (nextJoinData.password !== value) {
                 setError('비밀번호를 동일하게 입력해 주세요.')
                 setPass(false)
             } else {
@@ -56,8 +57,8 @@ const Step = ({title, inputData, step, setStep, joinData, setJoinData, goJoin, l
             }
         }
         if (name === 'gender' || name === 'birthday' || name === 'height' || name === 'weight') {
-            if(joinData.birthday && joinData.gender && joinData.height && joinData.weight){
-                if(new Date(joinData.birthday) > new Date()){
+            if(nextJoinData.birthday && nextJoinData.gender && nextJoinData.height && nextJoinData.weight){
+                if(new Date(nextJoinData.birthday) > new Date()){
                     setError('시간여행자다~~👽')
                     setPass(false)
                 } else {
@@ -70,7 +71,7 @@ const Step = ({title, inputData, step, setStep, joinData, setJoinData, goJoin, l
             }
         }
         if (name === 'bodyshape') {
-            if(value){
+            if(nextJoinData.bodyshape){
                 setError();
                 setPass(true);
             } else {
@@ -79,7 +80,7 @@ const Step = ({title, inputData, step, setStep, joinData, setJoinData, goJoin, l
             }
         }
         if (name === 'img' || name === 'user_name') {
-            if(joinData.img && joinData.user_name){
+            if(nextJoinData.user_name.trim()){
                 setError();
                 setPass(true);
             } else {
@@ -87,16 +88,22 @@ const Step = ({title, inputData, step, setStep, joinData, setJoinData, goJoin, l
                 setPass(false)
             }
         }
-        setJoinData({...joinData, [name]: value});
+        setJoinData(nextJoinData);
     }
 
     const uploadProfileImage = async(e) => {
-        const file = e.target.files[0];
+        const file = e.target.files?.[0];
+        if (!file) {
+            return;
+        }
+
         const profileData = new FormData();
         profileData.append('img', file);
         const result = await userApi.uploadUserImg(profileData);
         if (result.code === 200) {
-            setJoinData({...joinData, [e.target.name]: result.img});
+            const nextJoinData = {...joinData, [e.target.name]: result.img};
+            setJoinData(nextJoinData);
+            setPass(Boolean(nextJoinData.user_name.trim()));
         }
     }
     return ( 
