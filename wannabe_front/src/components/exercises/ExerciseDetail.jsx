@@ -5,7 +5,7 @@ import { Divider, IconButton, Typography, styled } from "@mui/material";
 import zIndex from "@mui/material/styles/zIndex";
 import StarsIcon from '@mui/icons-material/Stars';
 import { exerciseApi } from "../../api/services/exercise";
-import { getAssetUrl } from "../../api/url";
+import { getOptimizedExerciseAssetUrl } from "../../api/url";
 import { ForegroundBox } from "../styled_comp/StyledDiv";
 
 const ExerciseDetail = ({exercise, favExercises, refreshFav, setRefreshFav, onClick }) => {
@@ -76,7 +76,7 @@ const ExerciseDetail = ({exercise, favExercises, refreshFav, setRefreshFav, onCl
                     <StarsIcon style={{color:"lightgray", fontSize:'36px'}} /></IconButton>) 
             }
             <ExerImg
-                src={getAssetUrl(exercise.img)}
+                src={getOptimizedExerciseAssetUrl(exercise.img)}
                 alt={exercise.name}
                 width='100%'
                 height='215px'

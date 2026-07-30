@@ -2,7 +2,7 @@ import React, { Suspense, lazy, useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Typography, styled } from '@mui/material';
 import Carousel from 'react-material-ui-carousel'
-import { getAssetUrl } from "../../api/url";
+import { getOptimizedExerciseAssetUrl } from "../../api/url";
 
 const ExerciseModal = lazy(() => import("./ExerciseModal"));
 
@@ -21,7 +21,7 @@ const ExerciseFollow = ({favExercise}) => {
                         }}>
                     <Typography variant="h6"  >{favExercise.name}</Typography>
                     <ExerImg 
-                        src={getAssetUrl(favExercise.img)}
+                        src={getOptimizedExerciseAssetUrl(favExercise.img)}
                         alt={favExercise.name}
                         loading="lazy"
                         decoding="async"
