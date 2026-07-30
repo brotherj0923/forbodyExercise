@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { Suspense, lazy, useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Typography, styled } from '@mui/material';
 import Carousel from 'react-material-ui-carousel'
-import ExerciseModal from "./ExerciseModal";
 import { getAssetUrl } from "../../api/url";
+
+const ExerciseModal = lazy(() => import("./ExerciseModal"));
 
 const ExerciseFollow = ({favExercise}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,13 +23,19 @@ const ExerciseFollow = ({favExercise}) => {
                     <ExerImg 
                         src={getAssetUrl(favExercise.img)}
                         alt={favExercise.name}
+                        loading="lazy"
+                        decoding="async"
                         onClick={() => {
                             setIsModalOpen(true);
                         }}
                     />
                 </Box>
             </Box>
-            <ExerciseModal exercise={favExercise} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            {isModalOpen && (
+                <Suspense fallback={null}>
+                    <ExerciseModal exercise={favExercise} isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+                </Suspense>
+            )}
         </>
 
     );

@@ -1,4 +1,5 @@
 const { Category , Food, Exercise} = require('../models');
+const { withOptimizedImgs } = require('../utils/optimizedAsset');
 
 exports.get_category = async (req, res, next) => {
     try {
@@ -10,9 +11,14 @@ exports.get_category = async (req, res, next) => {
                 }
             ]
         })
+        const payload = category && typeof category.toJSON === 'function' ? category.toJSON() : category;
+        if (payload?.Exercises) {
+            payload.Exercises = withOptimizedImgs(payload.Exercises);
+        }
+
         res.json({
             code : 200,
-            payload : category
+            payload
         })
     } catch (err) {
         console.error(err);

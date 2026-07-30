@@ -14,6 +14,14 @@ export const exerciseApi = {
             "Authorization": token,
         }
     }),
+    getExercisePage: (token,data) => api.get('exercise/page', {
+        params: {
+            sort: data
+        },
+        headers: {
+            "Authorization": token,
+        }
+    }),
     getRandomTip: (token) => api.get('health_tip', {
         headers: {
             "Authorization": token,

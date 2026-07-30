@@ -61,7 +61,10 @@ app.set('port', process.env.PORT || 8000);
 app.use(
     cors(corsOptions),
     morgan('dev'),
-    express.static(path.join(__dirname, 'public')),
+    express.static(path.join(__dirname, 'public'), {
+        maxAge: '7d',
+        immutable: process.env.NODE_ENV === 'production',
+    }),
     express.json(),
     express.urlencoded({ extended: false }),
     session({

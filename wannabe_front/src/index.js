@@ -4,23 +4,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from '@mui/material/CssBaseline';
-import PretendardRegular from './fonts/Pretendard-Regular.woff'
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'Pretendard-Regular',
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: `
-        @font-face {
-          font-family: 'Pretendard-Regular';
-          font-style: normal;
-          font-weight: 400;
-          src: url(${PretendardRegular}) format('woff');
-        }
-      `
-    },
+    fontFamily: 'Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   },
   palette: {
     primary: {

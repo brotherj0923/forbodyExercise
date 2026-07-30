@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {getExercises, showRandom, sortExercise, exerciseInfo, hiddenInsert, favorite, unfavorite,favoriteExercise ,getExercisesBySort} =require('../controllers/exercise');
+const {getExercises, showRandom, sortExercise, exerciseInfo, hiddenInsert, favorite, unfavorite,favoriteExercise ,getExercisesBySort, exercisePage} =require('../controllers/exercise');
 const { verifyToken } = require('../middlewares');
 
 
@@ -8,6 +8,7 @@ const { verifyToken } = require('../middlewares');
 
 // /v1/exercise/ [GET - 전체 운동data 조회]
 router.get('/', verifyToken, getExercises);
+router.get('/page', verifyToken, exercisePage);
 
 // sort별로 운동 목록을 조회할 수 있다. 이미지조회(썸네일)
 // /v1/exercise/sort

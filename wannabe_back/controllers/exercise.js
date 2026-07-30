@@ -1,4 +1,5 @@
 const { Exercise, Category, Health_tip , User} = require('../models');
+const { withOptimizedImg, withOptimizedImgs } = require('../utils/optimizedAsset');
 const express = require('express')
 const app = express()
 
@@ -10,7 +11,7 @@ exports.getExercises = async (req, res, next) => {
         const exercises = await Exercise.findAll();
         res.json({
             code : 200,
-            payload : exercises
+            payload : withOptimizedImgs(exercises)
         });
     } catch (error) {
         console.error(error);
@@ -32,7 +33,7 @@ exports.sortExercise = async (req,res,next) => {
         }
         res.json({
             code : 200,
-            payload : exercises
+            payload : withOptimizedImgs(exercises)
         });
     } catch (error) {
         console.error(error);
@@ -81,7 +82,7 @@ exports.exerciseInfo = async (req,res,next) => {
         })
         res.json({
             code : 200,
-            payload : exercise_info
+            payload : withOptimizedImg(exercise_info)
         });
     } catch (error) {
         console.error(error);
@@ -188,8 +189,47 @@ exports.favoriteExercise = async (req, res, next) => {
 
         res.json({
             code: 200,
-            payload: favoriteExercises,
+            payload: withOptimizedImgs(favoriteExercises),
             message: '즐겨찾기 운동 목록을 성공적으로 가져왔습니다.'
+        });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+};
+
+exports.exercisePage = async (req, res, next) => {
+    console.log('exercise page data 조회');
+    try {
+        const sortArr = req.query.sort;
+        const userId = req.user.id;
+
+        const [exercises, healthTips, favoriteExercises] = await Promise.all([
+            sortArr
+                ? Exercise.findAll({ where: { sort: sortArr } })
+                : Promise.resolve([]),
+            Health_tip.findAll(),
+            Exercise.findAll({
+                include: {
+                    model: User,
+                    as: 'exerciseFollow',
+                    where: { id: userId },
+                    through: {
+                        attributes: []
+                    }
+                }
+            })
+        ]);
+
+        const randIndex = Math.floor(Math.random() * healthTips.length);
+
+        res.json({
+            code: 200,
+            payload: {
+                exercises: withOptimizedImgs(exercises),
+                randTip: healthTips[randIndex] || null,
+                favExercises: withOptimizedImgs(favoriteExercises),
+            }
         });
     } catch (error) {
         console.error(error);

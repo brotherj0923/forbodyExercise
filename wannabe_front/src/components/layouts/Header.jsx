@@ -19,7 +19,7 @@ const HideOnScroll = ({ children, window, setShowTopBtn}) => {
 };
 
 const HeaderContent = (props) => {
-    const { userImg } = useUserandRoleModel();
+    const { userImg } = useUserandRoleModel({ includeRoleModel: false });
     const navigate = useNavigate()
     const goUserMenu = () => navigate('/my')
     const goHome = () => navigate('/todolist')

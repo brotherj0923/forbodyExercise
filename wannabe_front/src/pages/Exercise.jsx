@@ -1,20 +1,21 @@
 import { Box, Typography, styled } from "@mui/material";
 import { BackgroundBox, ForegroundBox, PageBox } from "../components/styled_comp/StyledDiv";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import ExerciseDetail from "../components/exercises/ExerciseDetail";
 import ExerciseSelect from "../components/exercises/ExerciseSelect";
 import ExerciseFollow from "../components/exercises/ExerciseFollow";
 import TopButton from "../components/layouts/TopButton";
 import { useAuth } from './../hooks/useAuth';
 import Carousel from "react-material-ui-carousel";
-import ExerciseModal from "../components/exercises/ExerciseModal";
 import useUserandRoleModel from "../hooks/useUserandRoleModel";
 import { exerciseApi } from "../api/services/exercise";
 import { getAssetUrl } from "../api/url";
 import StarsIcon from '@mui/icons-material/Stars';
 import { bgcolor, borderLeft, width } from "@mui/system";
 import { PiX } from "react-icons/pi";
+
+const ExerciseModal = lazy(() => import("../components/exercises/ExerciseModal"));
 
 
 const Exercise = () => {
@@ -37,39 +38,28 @@ const Exercise = () => {
     const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
     const [exerciseSortName, setExerciseSortName] = useState(sorts);
     const { modelImg, modelProfile } = useUserandRoleModel();
+    const modelImgPath = modelImg || "";
+    const modelImgSrc = /(^|\/)uploads\//.test(modelImgPath.replace(/\\/g, "/")) ? "" : getAssetUrl(modelImgPath);
 
     
 
-    const getExercises = async () => {
+    const getExercisePage = async () => {
         // 운동 리스트 조회 기능
         // 로그인했을때와  운동 목록 태그 리스트가  변경되면 다시 실행되도로록
+        if (!token) {
+            return;
+        }
+
         const data = exerciseSortName.map(e => e.slice(1))
-        const res = await exerciseApi.getSortExercise(token, data);
-        console.log(res.payload);
-        setExercises(res.payload);
-    }
-
-    const getRandomTip = async () => {
-        const res = await exerciseApi.getRandomTip(token);
-        setRandTip(res.payload);
-    }
-
-    const getFavExercises = async() => {
-        const res = await exerciseApi.getFavExercises(token);
-        setFavExercises(res.payload);
+        const res = await exerciseApi.getExercisePage(token, data);
+        setExercises(res.payload?.exercises || []);
+        setRandTip(res.payload?.randTip);
+        setFavExercises(res.payload?.favExercises || []);
     }
 
     useEffect(() => {
-        getRandomTip();
-    }, [loginUser]);
-
-    useEffect(() => {
-        getExercises();    
-    }, [loginUser, exerciseSortName]);
-
-    useEffect(() => {
-        getFavExercises(); //
-    }, [refreshFav]);
+        getExercisePage();
+    }, [loginUser, exerciseSortName, refreshFav]);
     // 해당 유저가 즐겨찾기한 운동 목록 조회
     
     return (
@@ -99,11 +89,13 @@ const Exercise = () => {
                         justifyContent: 'center'
                     }}
                 >
-                {modelImg && (
+                {modelImgSrc && (
                     <ImageBox>
                     <img
-                        src={getAssetUrl(modelImg)}
+                        src={modelImgSrc}
                         alt={"img"}
+                        loading="lazy"
+                        decoding="async"
                         style={{ width: '300px', height: '300px', objectFit: 'cover' }}
                     />
                     </ImageBox>
@@ -173,14 +165,18 @@ const Exercise = () => {
                             />
                             
                         ))}
-                    <ExerciseModal 
-                        exercise={selectedExercise}
-                        isOpen={isExerciseModalOpen}
-                        onClose={() => {
-                            setIsExerciseModalOpen(false);
-                            setSelectedExercise({});
-                        }}
-                    />
+                    {isExerciseModalOpen && (
+                        <Suspense fallback={null}>
+                            <ExerciseModal 
+                                exercise={selectedExercise}
+                                isOpen={isExerciseModalOpen}
+                                onClose={() => {
+                                    setIsExerciseModalOpen(false);
+                                    setSelectedExercise({});
+                                }}
+                            />
+                        </Suspense>
+                    )}
             </BackgroundBox>
         </Box>
     );

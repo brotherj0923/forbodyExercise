@@ -2,9 +2,15 @@ import { useAuth } from "./useAuth";
 import { useEffect, useState } from "react";
 import { userApi } from "../api/services/user";
 
-const useUserandRoleModel = () => {
+const userProfileCache = new Map();
+const userProfileRequestCache = new Map();
+const modelProfileCache = new Map();
+const modelProfileRequestCache = new Map();
+
+const useUserandRoleModel = (options = {}) => {
     const token = localStorage.getItem("token");
     const { loginUser, getUserInfoByToken } = useAuth();
+    const includeRoleModel = options.includeRoleModel !== false;
     
     const [userProfile, setUserProfile] = useState(null);
     const [modelProfile, setModelProfile] = useState(null);
@@ -14,8 +20,36 @@ const useUserandRoleModel = () => {
     // user 정보 가져오기
     const getUserInfo = async () => {
         try {
-            const up = await getUserInfoByToken();
-            setUserProfile(up);
+            if (!loginUser) {
+                return;
+            }
+
+            if (userProfileCache.has(loginUser)) {
+                setUserProfile(userProfileCache.get(loginUser));
+                return;
+            }
+
+            let request = userProfileRequestCache.get(loginUser);
+            if (!request) {
+                request = getUserInfoByToken()
+                    .then((profile) => {
+                        if (profile) {
+                            userProfileCache.set(loginUser, profile);
+                        }
+                        userProfileRequestCache.delete(loginUser);
+                        return profile;
+                    })
+                    .catch((err) => {
+                        userProfileRequestCache.delete(loginUser);
+                        throw err;
+                    });
+                userProfileRequestCache.set(loginUser, request);
+            }
+
+            const up = await request;
+            if (up) {
+                setUserProfile(up);
+            }
         } catch (err) {
             console.error("Error fetching user info: ", err);
         }
@@ -37,10 +71,36 @@ const useUserandRoleModel = () => {
     // rolemodel 정보 가져오기
     const getModelInfo = async () => {
         try {
-            if (userProfile?.role_model_id) {
+            if (userProfile?.role_model_id && token) {
                 const role_model = userProfile.role_model_id;
-                const res = await userApi.getUser(`${role_model}`, token);
-                setModelProfile(res.payload);
+                const cacheKey = `${token}:${role_model}`;
+
+                if (modelProfileCache.has(cacheKey)) {
+                    setModelProfile(modelProfileCache.get(cacheKey));
+                    return;
+                }
+
+                let request = modelProfileRequestCache.get(cacheKey);
+                if (!request) {
+                    request = userApi.getUser(`${role_model}`, token)
+                        .then((res) => {
+                            if (res.payload) {
+                                modelProfileCache.set(cacheKey, res.payload);
+                            }
+                            modelProfileRequestCache.delete(cacheKey);
+                            return res.payload;
+                        })
+                        .catch((err) => {
+                            modelProfileRequestCache.delete(cacheKey);
+                            throw err;
+                        });
+                    modelProfileRequestCache.set(cacheKey, request);
+                }
+
+                const res = await request;
+                if (res) {
+                    setModelProfile(res);
+                }
             }
         } catch (err) {
             console.error("Error fetching model info: ", err);
@@ -69,9 +129,11 @@ const useUserandRoleModel = () => {
     useEffect(() => {
         if (userProfile) {
             getUserImg();
-            getModelInfo();
+            if (includeRoleModel) {
+                getModelInfo();
+            }
         }
-    }, [userProfile]);
+    }, [userProfile, includeRoleModel]);
 
     useEffect(() => {
         if (modelProfile) {
