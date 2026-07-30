@@ -61,7 +61,9 @@ const useUserandRoleModel = () => {
     };
 
     useEffect(() => {
-        getUserInfo();
+        if (loginUser) {
+            getUserInfo();
+        }
     }, [loginUser]);
 
     useEffect(() => {

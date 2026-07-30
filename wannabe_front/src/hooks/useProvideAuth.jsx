@@ -44,6 +44,15 @@ export const useProvideAuth = () => {
         // 리프레쉬 토큰 null로 변경
         try{
             const token = localStorage.getItem("token");
+            if (!token) {
+                setLoginUser(null);
+                localStorage.removeItem("userId");
+                localStorage.removeItem("token");
+                localStorage.removeItem("date")
+                callback();
+                return;
+            }
+
             const res = await userApi.modifyRefreshToken(
                 {refresh_token: null}
                 , token)
@@ -64,6 +73,10 @@ export const useProvideAuth = () => {
 
     const getUserIdByToken = () => {
         try {
+            if (!loginUser) {
+                return;
+            }
+
             const userInfo = jwtDecode(loginUser);
             const userId = userInfo.id;
             return userId;
@@ -75,6 +88,10 @@ export const useProvideAuth = () => {
     const getUserInfoByToken = async () => {
         try {
             const userId = getUserIdByToken();
+            if (!userId) {
+                return null;
+            }
+
             const res = await userApi.getUser(`${userId}`, loginUser);
             return res.payload
         } catch (err) {

@@ -18,20 +18,13 @@ const HideOnScroll = ({ children, window, setShowTopBtn}) => {
     );
 };
 
-const Header = (props) => {
-    const { loginUser } = useAuth();
+const HeaderContent = (props) => {
     const { userImg } = useUserandRoleModel();
     const navigate = useNavigate()
-    const location = useLocation();
     const goUserMenu = () => navigate('/my')
     const goHome = () => navigate('/todolist')
     
     // 여기에 페이지 주소를 넣으면 상단 바가 사라집니다.
-    const noShowHeader = ['/', '/login', '/signup'] 
-    if (!loginUser || noShowHeader.includes(location.pathname)) {
-        return null;
-    }
-
     return (
             <HideOnScroll setShowTopBtn={props.setShowTopBtn}>
             <AppBar color="white" style={{boxShadow:"none"}}>
@@ -57,6 +50,18 @@ const Header = (props) => {
             </AppBar>
             </HideOnScroll>
     );
+}
+
+const Header = (props) => {
+    const { loginUser } = useAuth();
+    const location = useLocation();
+
+    const noShowHeader = ['/', '/login', '/signup'];
+    if (!loginUser || noShowHeader.includes(location.pathname)) {
+        return null;
+    }
+
+    return <HeaderContent {...props} />;
 }
 
 export default Header;
