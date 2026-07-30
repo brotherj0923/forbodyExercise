@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.7449026d.css","mappings":"AAAA,KACI,eAAgB,CAChB,oBACJ","sources":["App.css"],"sourcesContent":["html {\n    overflow-y: auto;\n    scrollbar-width: none;\n}"],"names":[],"sourceRoot":""}
