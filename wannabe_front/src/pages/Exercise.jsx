@@ -51,10 +51,22 @@ const Exercise = () => {
         }
 
         const data = exerciseSortName.map(e => e.slice(1))
-        const res = await exerciseApi.getExercisePage(token, data);
-        setExercises(res.payload?.exercises || []);
-        setRandTip(res.payload?.randTip);
-        setFavExercises(res.payload?.favExercises || []);
+        try {
+            const res = await exerciseApi.getExercisePage(token, data);
+            setExercises(res.payload?.exercises || []);
+            setRandTip(res.payload?.randTip);
+            setFavExercises(res.payload?.favExercises || []);
+        } catch (err) {
+            console.error(err);
+            const [exerciseRes, tipRes, favRes] = await Promise.all([
+                exerciseApi.getSortExercise(token, data),
+                exerciseApi.getRandomTip(token),
+                exerciseApi.getFavExercises(token),
+            ]);
+            setExercises(exerciseRes.payload || []);
+            setRandTip(tipRes.payload);
+            setFavExercises(favRes.payload || []);
+        }
     }
 
     useEffect(() => {
